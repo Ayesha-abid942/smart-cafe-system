@@ -1,0 +1,263 @@
+/* ============================================
+   KDS CONTAINER
+   ============================================ */
+.kds-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 25px 40px;
+    box-sizing: border-box;
+
+    background: linear-gradient(135deg, #fff5f0, #ffe8e0);
+    color: #2c2c2c;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.kds-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.kds-logo {
+    width: 45px;
+    height: 45px;
+}
+
+.kds-header h2 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+.kds-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   CARD
+   ============================================ */
+.kds-card {
+    background: #ffffff;
+    border-radius: 25px;
+    padding: 20px;
+    border: 1px solid #ffd4d4;
+
+    box-shadow: 0 10px 30px rgba(230, 57, 70, 0.08);
+
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.kds-card:hover {
+    transform: translateY(-6px);
+    border-color: #e63946;
+    box-shadow: 0 20px 40px rgba(230, 57, 70, 0.2);
+}
+
+/* ============================================
+   CARD HEADER
+   ============================================ */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    color: #1a1a1a;
+    font-size: 15px;
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+.card-body h3 {
+    color: #e63946;
+    margin: 10px 0;
+    font-size: 20px;
+}
+
+.card-body p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ============================================
+   STATUS
+   ============================================ */
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Pending */
+.status.pending {
+    background: #ffe5e7;
+    color: #e63946;
+}
+
+/* Cooking */
+.status.cooking {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* Ready */
+.status.ready {
+    background: #e63946;
+    color: #ffffff;
+    animation: blink 1s infinite;
+}
+
+/* Blink animation */
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   WARNING & URGENT
+   ============================================ */
+.kds-card.warning {
+    border-left: 5px solid orange;
+}
+
+.kds-card.urgent {
+    border-left: 5px solid #e63946;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 10px #e63946;
+    }
+
+    50% {
+        box-shadow: 0 0 25px #e63946;
+    }
+
+    100% {
+        box-shadow: 0 0 10px #e63946;
+    }
+}
+
+/* ============================================
+   ITEMS LIST
+   ============================================ */
+.items-list p {
+    margin: 4px 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* ============================================
+   DETAIL OVERLAY
+   ============================================ */
+.kds-detail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   DETAIL BOX
+   ============================================ */
+.detail-box {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    width: 320px;
+    text-align: center;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.detail-box h2 {
+    margin-bottom: 10px;
+}
+
+.detail-box p {
+    margin: 6px 0;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.detail-box .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.detail-box button {
+    padding: 12px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.3s ease;
+}
+
+/* Buttons Theme */
+.detail-box button:nth-child(1) {
+    background: #ffc107;
+}
+
+.detail-box button:nth-child(2) {
+    background: #e63946;
+    color: white;
+}
+
+.detail-box button:nth-child(3) {
+    background: #1a1a1a;
+    color: white;
+}
+
+.detail-box button:hover {
+    transform: scale(1.05);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1000px) {
+    .kds-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .kds-grid {
+        grid-template-columns: 1fr;
+    }
+}

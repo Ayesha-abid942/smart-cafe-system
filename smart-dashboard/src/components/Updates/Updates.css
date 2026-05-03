@@ -1,0 +1,38 @@
+.updates {
+    width: 85%;
+    background: white;
+    border-radius: 0.7rem;
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* 🔥 THIS IS YOUR MISSING CARD STYLE */
+.update-card {
+    background: #ffffff;
+    padding: 0.7rem;
+    border-radius: 0.6rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.name {
+    font-weight: bold;
+    color: #333;
+}
+
+.status {
+    font-size: 12px;
+    color: #ff6600;
+}
+
+.update-card:hover {
+    transform: scale(1.02);
+    transition: 0.2s;
+}

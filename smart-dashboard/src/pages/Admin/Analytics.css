@@ -1,0 +1,68 @@
+.page-container {
+    padding: 20px;
+}
+
+.page-box {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+}
+
+.analytics-header {
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.cards {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    flex: 1;
+    padding: 20px;
+    border-radius: 20px;
+    color: white;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.circle-wrap {
+    margin-bottom: 15px;
+}
+
+.circle {
+    width: 70px;
+    height: 70px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top: 6px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card h2 {
+    margin: 15px 0 5px;
+    font-size: 28px;
+}
+
+.card p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
