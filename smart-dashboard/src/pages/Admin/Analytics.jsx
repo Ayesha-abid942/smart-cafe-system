@@ -32,6 +32,11 @@ const Analytics = () => {
     const totalSales = revenue;
     const expenses = Math.round(revenue * 0.3);
 
+    const chartDates = sales.map((d) => {
+        const date = new Date(d.day);
+        return `${date.getDate()}-${date.getMonth() + 1}`;
+    });
+
     const cardsData = [
         {
             title: "Sales",
@@ -42,6 +47,7 @@ const Analytics = () => {
             barValue: 70,
             value: totalSales,
             png: UilUsdSquare,
+            categories: chartDates,
             series: [
                 {
                     name: "Sales",
@@ -58,6 +64,7 @@ const Analytics = () => {
             barValue: 80,
             value: revenue,
             png: UilMoneyWithdrawal,
+            categories: chartDates,
             series: [
                 {
                     name: "Revenue",
@@ -74,34 +81,32 @@ const Analytics = () => {
             barValue: 60,
             value: expenses,
             png: UilClipboardAlt,
+            categories: chartDates,
             series: [
                 {
                     name: "Expenses",
-                    data: sales.map((d) => Math.round(Number(d.total) * 0.3)),
+                    data: sales.map((d) =>
+                        Math.round(Number(d.total) * 0.3)
+                    ),
                 },
             ],
         },
     ];
 
     return (
-        <div>
-            <h1
-                style={{
-                    marginLeft: "60px",
-                    marginTop: "30px",
-                    fontSize: "42px",
-                    fontWeight: "700",
-                }}
-            >
-                ANALYTICS DASHBOARD
-            </h1>
+        <div className="page-container">
+            <div className="page-box">
+                <div className="analytics-header">
+                    <h1 className="page-title">ANALYTICS DASHBOARD</h1>
+                </div>
 
-            <div className="Cards">
-                {cardsData.map((card, id) => (
-                    <div className="parentContainer" key={id}>
-                        <Card {...card} />
-                    </div>
-                ))}
+                <div className="Cards">
+                    {cardsData.map((card, id) => (
+                        <div className="parentContainer" key={id}>
+                            <Card {...card} />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

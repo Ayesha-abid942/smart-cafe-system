@@ -39,8 +39,8 @@ const updateInventoryAndCheck = (ingredient, qty) => {
 
     db.query(
         `UPDATE inventory 
-         SET quantity = quantity - ? 
-         WHERE LOWER(name) = LOWER(?)`,
+         SET quantity = GREATEST(quantity - ? ,0)
+         WHERE LOWER(TRIM(name)) = LOWER(TRIM(?))`,
         [qty, ingredient],
         (err, result) => {
 
@@ -127,7 +127,7 @@ app.post("/orders", (req, res) => {
 
                 // ================= 🔥 RECIPE SYSTEM =================
                 db.query(
-                    "SELECT * FROM recipes WHERE item_name = ?",
+                    "SELECT * FROM recipes WHERE LOWER(TRIM(item_name)) = LOWER(TRIM(?))",
                     [item.name],
                     (err, recipeResults) => {
 
