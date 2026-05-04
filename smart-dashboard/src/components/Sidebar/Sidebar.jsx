@@ -44,7 +44,9 @@ const Sidebar = ({ expanded, setExpanded }) => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("auth");
+
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("userRole")
         navigate("/login");
     };
 

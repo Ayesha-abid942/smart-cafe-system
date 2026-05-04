@@ -1,11 +1,9 @@
 import React from 'react';
 import { Coffee, ArrowRight } from 'lucide-react';
 
-interface WelcomeProps {
-  onGetStarted: () => void;
-}
 
-const Welcome: React.FC<WelcomeProps> = ({ onGetStarted }) => {
+
+const Welcome = ({ onGetStarted }) => {
   return (
     <div className="welcome-container">
       {/* LEFT SIDE - IMAGE */}

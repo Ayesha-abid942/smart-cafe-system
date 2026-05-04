@@ -562,6 +562,10 @@
   transition: color 0;
 }
 
+.forgot-link :hover {
+  color: #5d3a1a;
+}
+
 /* ============================================ */
 /* DASHBOARD PAGE (After Login)                 */
 /* ============================================ */

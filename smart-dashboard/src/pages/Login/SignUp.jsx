@@ -1,34 +1,30 @@
-import React, { useState, type FormEvent } from 'react';
+import React, { useState } from 'react';
 import { Coffee, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowLeft } from 'lucide-react';
 
-interface SignUpProps {
-    onBack: () => void;
-    onSignIn: () => void;
-}
 
-const SignUp: React.FC<SignUpProps> = ({ onBack, onSignIn }) => {
-    const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+const SignUp = ({ onBack, onSignIn }) => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: '',
         confirmPassword: ''
     });
-    const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [successMessage, setSuccessMessage] = useState<string>('');
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        if (errors[name as keyof typeof errors]) {
+        if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
         if (successMessage) setSuccessMessage('');
     };
 
-    const validateForm = (): boolean => {
-        const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
+    const validateForm = () => {
+        const newErrors = {};
 
         if (!formData.email) {
             newErrors.email = 'Email is required';
@@ -50,7 +46,7 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignIn }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) return;
@@ -58,14 +54,16 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignIn }) => {
         setIsLoading(true);
 
         setTimeout(() => {
+            localStorage.setItem("newAdminEmail", formData.email);
+            localStorage.setItem("newAdminPassword", formData.password);
             // Since admin registration is restricted, show message and redirect to sign in
-            setSuccessMessage('Admin accounts are restricted. Please contact system administrator.');
-            setIsLoading(false);
+            setSuccessMessage('Account created successfully!');
+
 
             // Auto redirect to sign in after 2 seconds
             setTimeout(() => {
                 onSignIn();
-            }, 2000);
+            }, 1500);
         }, 1000);
     };
 
