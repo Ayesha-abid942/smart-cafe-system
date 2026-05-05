@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Coffee, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowLeft } from 'lucide-react';
 
 
@@ -53,18 +54,24 @@ const SignUp = ({ onBack, onSignIn }) => {
 
         setIsLoading(true);
 
-        setTimeout(() => {
-            localStorage.setItem("newAdminEmail", formData.email);
-            localStorage.setItem("newAdminPassword", formData.password);
-            // Since admin registration is restricted, show message and redirect to sign in
-            setSuccessMessage('Account created successfully!');
+        try {
+            const res = await axios.post("http://localhost:8001/register", {
+                username: formData.email, // (tum email ko username bana rahi ho)
+                password: formData.password,
+            });
 
+            if (res.data.success) {
+                setSuccessMessage("Account created successfully!");
 
-            // Auto redirect to sign in after 2 seconds
-            setTimeout(() => {
-                onSignIn();
-            }, 1500);
-        }, 1000);
+                setTimeout(() => {
+                    onSignIn();
+                }, 1500);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        setIsLoading(false);
     };
 
     return (

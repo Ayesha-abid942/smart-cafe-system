@@ -1,25 +1,33 @@
 import React from "react";
 import "./Cards.css";
-import { cardsData } from "../../Data/Data";
+import { getCardsData } from "../../Data/Data";
 import Card from "../Card/Card";
 
-const Cards = () => {
+const Cards = ({ data }) => {
+
+    const safeData = {
+        sales: data?.sales || 0,
+        salesPercent: data?.salesPercent || 0,
+        salesChart: data?.salesChart || [],
+
+        revenue: data?.revenue || 0,
+        revenuePercent: data?.revenuePercent || 0,
+        revenueChart: data?.revenueChart || [],
+
+        expenses: data?.expenses || 0,
+        expensesPercent: data?.expensesPercent || 0,
+        expensesChart: data?.expensesChart || [],
+    };
+
+    const cardsData = getCardsData(safeData);
+
     return (
         <div className="Cards">
-            {cardsData.map((card, id) => {
-                return (
-                    <div className="parentContainer" key={id}>
-                        <Card
-                            title={card.title}
-                            color={card.color}
-                            barValue={card.barValue}
-                            value={card.value}
-                            png={card.png}
-                            series={card.series}
-                        />
-                    </div>
-                );
-            })}
+            {cardsData.map((card, id) => (
+                <div className="parentContainer" key={id}>
+                    <Card {...card} />
+                </div>
+            ))}
         </div>
     );
 };

@@ -183,21 +183,61 @@ export default function SideCart() {
 
           {/* ✅ IMAGES SAME */}
           <div className="payment-methods-grid">
-            <div className={`payment - method - card ${paymentMethod === 'jazzcash' ? 'active' : ''}`} onClick={() => setPaymentMethod('jazzcash')}>
+            <div className={`payment-method-card ${paymentMethod === 'jazzcash' ? 'active' : ''}`} onClick={() => setPaymentMethod('jazzcash')}>
               <img src="/images/jazzcash.png" className="payment-method-img" />
               {paymentMethod === 'jazzcash' && <span className="check-mark">✓</span>}
             </div>
 
-            <div className={`payment - method - card ${paymentMethod === 'easypaisa' ? 'active' : ''}`} onClick={() => setPaymentMethod('easypaisa')}>
+            <div className={`payment-method-card ${paymentMethod === 'easypaisa' ? 'active' : ''}`} onClick={() => setPaymentMethod('easypaisa')}>
               <img src="/images/easypaisa.png" className="payment-method-img" />
               {paymentMethod === 'easypaisa' && <span className="check-mark">✓</span>}
             </div>
 
-            <div className={`payment - method - card ${paymentMethod === 'card' ? 'active' : ''}`} onClick={() => setPaymentMethod('card')}>
+            <div className={`payment-method-card ${paymentMethod === 'card' ? 'active' : ''}`} onClick={() => setPaymentMethod('card')}>
               <img src="/images/card.png" className="payment-method-img" />
               {paymentMethod === 'card' && <span className="check-mark">✓</span>}
             </div>
           </div >
+          {paymentMethod === "jazzcash" && (
+            <div className="payment-info-box">
+              <div className="info-row">
+                <span>📱 Send Rs. {total} to:</span>
+              </div>
+
+              <div className="info-row">
+                <strong>JazzCash: 03001234567</strong>
+              </div>
+
+              <div className="info-row">
+                <span>Account Name: Smart Cafe</span>
+              </div>
+
+              <div className="info-warning">
+                ⚠️ Enter TID after payment
+              </div>
+            </div>
+          )}
+
+          {paymentMethod === "easypaisa" && (
+            <div className="payment-info-box">
+              <div className="info-row">
+                <span>📱 Send Rs. {total} to:</span>
+              </div>
+
+              <div className="info-row">
+                <strong>Easypaisa: 03123456789</strong>
+              </div>
+
+              <div className="info-row">
+                <span>Account Name: Smart Cafe</span>
+              </div>
+
+              <div className="info-warning">
+                ⚠️ Enter TID after payment
+              </div>
+            </div>
+          )}
+
 
           {paymentMethod && (
             <form className="payment-side-form" onSubmit={handlePaymentSubmit}>

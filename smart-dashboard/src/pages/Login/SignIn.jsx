@@ -1,43 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Coffee,
-  Mail,
   Lock,
   Eye,
   EyeOff,
   AlertCircle,
   ArrowLeft,
+  User,
 } from "lucide-react";
 
-
-const SignIn = ({
-  onBack,
-  onForgotPassword,
-  onCreateAccount,
-}) => {
+const SignIn = ({ onBack, onForgotPassword, onCreateAccount }) => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const savedEmail =
-    localStorage.getItem("newAdminEmail") || "admin@smartcafe.com";
-  const savedPassword =
-    localStorage.getItem("newAdminPassword") || "Admin123";
-
-
+  // ================= VALIDATION =================
   const validateForm = () => {
     const newErrors = {};
 
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Please enter valid email";
+    if (!username) {
+      newErrors.username = "Username is required";
     }
 
     if (!password) {
@@ -50,30 +39,35 @@ const SignIn = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  // ================= LOGIN =================
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      if (
-        email === savedEmail &&
-        password === savedPassword
-      ) {
-        localStorage.setItem("adminToken", "admin_authenticated");
-        localStorage.setItem("userRole", "admin");
-        setLoginError("");
+    try {
+      const res = await axios.post("http://localhost:8001/login", {
+        username,
+        password,
+      });
 
-        // Redirect to admin dashboard
+      if (res.data.success) {
+        localStorage.setItem("adminToken", "admin_authenticated");
+        localStorage.setItem("userRole", res.data.user.role);
+
+        setLoginError("");
         navigate("/admin");
       } else {
-        setLoginError("Invalid email or password");
+        setLoginError("Invalid username or password");
       }
+    } catch (error) {
+      console.log(error);
+      setLoginError("Server error");
+    }
 
-      setIsLoading(false);
-    }, 1200);
+    setIsLoading(false);
   };
 
   return (
@@ -84,6 +78,7 @@ const SignIn = ({
           alt="Smart Cafe"
           className="login-left-image"
         />
+
         <div className="login-left-overlay">
           <Coffee size={32} />
           <h2>Smart Cafe</h2>
@@ -111,22 +106,23 @@ const SignIn = ({
           )}
 
           <form onSubmit={handleSubmit} className="login-form">
-            {/* Email */}
+
+            {/* USERNAME */}
             <div className="form-group">
-              <label>Email</label>
+              <label>Username</label>
               <div className="input-wrapper">
-                <Mail size={18} />
+                <User size={18} />
                 <input
-                  type="email"
-                  value={email}
-                  placeholder="admin@smartcafe.com"
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  value={username}
+                  placeholder="Enter username"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
-              {errors.email && <p>{errors.email}</p>}
+              {errors.username && <p>{errors.username}</p>}
             </div>
 
-            {/* Password */}
+            {/* PASSWORD */}
             <div className="form-group">
               <label>Password</label>
               <div className="input-wrapper">
@@ -145,15 +141,18 @@ const SignIn = ({
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+
               {errors.password && <p>{errors.password}</p>}
             </div>
 
+            {/* FORGOT PASSWORD */}
             <div className="forgot-row">
               <button type="button" onClick={onForgotPassword}>
                 Forgot Password?
               </button>
             </div>
 
+            {/* SUBMIT */}
             <button type="submit" disabled={isLoading} className="submit-btn">
               {isLoading ? "Signing In..." : "Sign In"}
             </button>

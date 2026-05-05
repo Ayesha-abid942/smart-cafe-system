@@ -11,41 +11,41 @@ function Navbar() {
 
   const handleGoBack = () => navigate(-1);
 
-  // 🔥 FIX: customer home check
-  const isHomePage = location.pathname === "/customer";
+  // Home page detect
+  const isHomePage =
+    location.pathname === "/" ||
+    location.pathname === "/customer";
 
   return (
     <ul className="navbar">
 
-      {/* 🔙 BACK BUTTON */}
-      <li style={{ order: -1 }}>
-        {!isHomePage && (
+      {/* BACK BUTTON */}
+      {!isHomePage && (
+        <li>
           <button onClick={handleGoBack} className="nav-back-btn">
             ← BACK
           </button>
-        )}
-      </li>
+        </li>
+      )}
 
-      {/* 🔥 NAV LINKS */}
-      <div className="nav-links-container" style={{ display: 'flex', gap: '40px' }}>
-
-        {/* ❌ OLD → "/" */}
-        {/* ✅ NEW → "/customer/..." */}
-
-        <li><Link to="/customer">HOME</Link></li>
-        <li><Link to="/customer/menu">MENU</Link></li>
-        <li><Link to="/customer/about">ABOUT</Link></li>
-        <li><Link to="/customer/reviews">REVIEWS</Link></li>
-        <li><Link to="/customer/contact">CONTACT</Link></li>
-
+      {/* NAV LINKS */}
+      <div
+        className="nav-links-container"
+        style={{ display: "flex", gap: "40px" }}
+      >
+        <li><Link to="/">HOME</Link></li>
+        <li><Link to="/menu">MENU</Link></li>
+        <li><Link to="/about">ABOUT</Link></li>
+        <li><Link to="/reviews">REVIEWS</Link></li>
+        <li><Link to="/contact">CONTACT</Link></li>
       </div>
 
-      {/* 🛒 CART */}
-      <li style={{ order: 1 }}>
+      {/* CART */}
+      <li>
         <div
           onClick={() => setIsCartOpen(true)}
           className="cart-icon-wrapper"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: "pointer" }}
         >
           <img src="/images/cart.png" alt="cart" className="cart-icon" />
 

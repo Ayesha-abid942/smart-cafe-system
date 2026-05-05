@@ -357,6 +357,153 @@ app.get("/api/reviews/stats", (req, res) => {
         res.json(result);
     });
 });
+app.post("/api/messages", (req, res) => {
+    const { name, email, message } = req.body;
+
+    db.query(
+        "INSERT INTO messages (name, email, message) VALUES (?, ?, ?)",
+        [name, email, message],
+        (err, result) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json(err);
+            }
+
+            const newMessage = {
+                id: result.insertId,
+                name,
+                email,
+                message
+            };
+
+            // optional real-time update (admin panel ke liye useful)
+            io.emit("newMessage", newMessage);
+
+            res.json(newMessage);
+        }
+    );
+});
+app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+
+    db.query(
+        "SELECT * FROM users WHERE username = ? AND password = ?",
+        [username, password],
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+
+            if (result.length > 0) {
+                res.json({
+                    success: true,
+                    user: result[0]
+                });
+            } else {
+                res.json({
+                    success: false,
+                    message: "Invalid username or password"
+                });
+            }
+        }
+    );
+});
+app.post("/register", (req, res) => {
+    const { username, password } = req.body;
+
+    db.query(
+        "INSERT INTO users (username, password) VALUES (?, ?)",
+        [username, password],
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+
+            res.json({
+                success: true,
+                message: "User created successfully"
+            });
+        }
+    );
+});
+app.get("/api/messages/recent", (req, res) => {
+    db.query(
+        "SELECT * FROM messages WHERE created_at >= NOW() - INTERVAL 1 DAY ORDER BY created_at DESC",
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result);
+        }
+    );
+});
+app.get("/total-messages", (req, res) => {
+    db.query(
+        "SELECT COUNT(*) AS total FROM messages",
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result[0]);
+        }
+    );
+});
+app.get("/sales-monthly", (req, res) => {
+    db.query(
+        `
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            COUNT(id) as total
+        FROM orders
+        GROUP BY month
+        ORDER BY month ASC
+        `,
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result);
+        }
+    );
+});
+app.get("/revenue-monthly", (req, res) => {
+    db.query(
+        `
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            SUM(total_price) as total
+        FROM orders
+        GROUP BY month
+        ORDER BY month ASC
+        `,
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result);
+        }
+    );
+});
+app.get("/expenses-monthly", (req, res) => {
+    db.query(
+        `
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            SUM(amount) as total
+        FROM expenses
+        GROUP BY month
+        ORDER BY month ASC
+        `,
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result);
+        }
+    );
+});
+app.get("/messages-monthly", (req, res) => {
+    db.query(
+        `
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            COUNT(*) as total
+        FROM messages
+        GROUP BY month
+        ORDER BY month ASC
+        `,
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result);
+        }
+    );
+});
 // ================= START =================
 server.listen(8001, () => {
     console.log("🚀 Server running on http://localhost:8001");

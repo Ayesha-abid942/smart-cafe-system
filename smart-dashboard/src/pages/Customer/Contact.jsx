@@ -12,10 +12,25 @@ export default function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Message sent successfully!");
-    setForm({ name: "", email: "", message: "" });
+
+    try {
+      const res = await fetch("http://localhost:8001/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (res.ok) {
+        alert("Message sent successfully!");
+        setForm({ name: "", email: "", message: "" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -35,7 +50,7 @@ export default function Contact() {
 
         <div className="info-card">
           <h3>📞 Phone</h3>
-          <p>+92 300 1234567</p>
+          <p>+92 331 6609135</p>
         </div>
 
         <div className="info-card">
