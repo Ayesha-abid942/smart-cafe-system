@@ -85,7 +85,7 @@ export default function Reviews() {
       <div className="reviews-grid">
         {reviews.map((r) => (
           <div className="review-card" key={r.id}>
-            <img src="/images/user.png" alt="" />
+            <img src="/images/user.png" alt="" className="review-img" />
             <h3>{r.name}</h3>
             <div>{"⭐".repeat(r.rating)}</div>
             <p>"{r.message}"</p>

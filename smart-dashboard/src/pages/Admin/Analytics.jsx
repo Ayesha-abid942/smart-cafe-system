@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Card from "../../components/Card/Card";
 import Cards from "../../components/Cards/Cards";
 import "./Analytics.css";
 
@@ -41,23 +40,29 @@ const Analytics = () => {
         fetchData();
     }, []);
 
-    // Labels for chart
+    // 📊 chart labels
     const chartDates = sales.map((d) => {
         const date = new Date(d.day);
-        return ` ${date.getDate()}-${date.getMonth() + 1}`;
+        return ` ${date.getDate()} -${date.getMonth() + 1}`;
     });
 
-    // Total sales
+    // 📊 total sales
     const totalSales = sales.reduce(
         (acc, d) => acc + Number(d.total || 0),
         0
     );
 
-    // Safe percentage helper (crash proof)
+    // 🔥 FIXED percentage logic (proper scaling)
     const safePercent = (value, max) => {
         if (!max || max === 0) return 0;
         return Math.min(100, Math.round((value / max) * 100));
     };
+
+    // 🔥 dynamic max values
+    const salesValues = sales.map(d => Number(d.total || 0));
+    const maxSales = Math.max(...salesValues, 1);
+    const expenseValues = sales.map(d => Number(d.total || 0) * 0.3);
+    const maxExpenses = Math.max(...expenseValues, 1);
 
     const cardsData = [
         {
@@ -66,16 +71,11 @@ const Analytics = () => {
                 backGround: "linear-gradient(180deg,#bb67ff,#c484f3)",
                 boxShadow: "0px 10px 20px 0px #e0c6f5",
             },
-            barValue: safePercent(totalSales, 10000),
+            barValue: safePercent(totalSales, maxSales),
             value: totalSales,
             png: UilUsdSquare,
             categories: chartDates,
-            series: [
-                {
-                    name: "Sales",
-                    data: sales.map((d) => Number(d.total || 0)),
-                },
-            ],
+            series: [{ name: "Sales", data: salesValues }],
         },
         {
             title: "Revenue",
@@ -83,16 +83,11 @@ const Analytics = () => {
                 backGround: "linear-gradient(180deg,#FF919D,#FC929D)",
                 boxShadow: "0px 10px 20px 0px #FDC0C7",
             },
-            barValue: safePercent(revenue, 150000),
+            barValue: safePercent(revenue, Math.max(revenue, 1)),
             value: revenue,
             png: UilMoneyWithdrawal,
             categories: chartDates,
-            series: [
-                {
-                    name: "Revenue",
-                    data: sales.map((d) => Number(d.total || 0)),
-                },
-            ],
+            series: [{ name: "Revenue", data: salesValues }],
         },
         {
             title: "Expenses",
@@ -100,18 +95,11 @@ const Analytics = () => {
                 backGround: "linear-gradient(#f8d49a,#ffca71)",
                 boxShadow: "0px 10px 20px 0px #F9D59B",
             },
-            barValue: safePercent(expenses, revenue),
+            barValue: safePercent(expenses, maxExpenses),
             value: expenses,
             png: UilClipboardAlt,
             categories: chartDates,
-            series: [
-                {
-                    name: "Expenses",
-                    data: sales.map((d) =>
-                        Math.round(Number(d.total || 0) * 0.3)
-                    ),
-                },
-            ],
+            series: [{ name: "Expenses", data: expenseValues }],
         },
         {
             title: "Messages",
@@ -119,7 +107,7 @@ const Analytics = () => {
                 backGround: "linear-gradient(180deg,#00c6ff,#0072ff)",
                 boxShadow: "0px 10px 20px 0px #a3d8ff",
             },
-            barValue: safePercent(messages, 50),
+            barValue: safePercent(messages, 10), // 👈 small scale so change visible
             value: messages,
             png: UilCommentAltMessage,
             categories: chartDates,
@@ -143,19 +131,23 @@ const Analytics = () => {
                 <Cards
                     data={{
                         sales: totalSales,
-                        salesPercent: safePercent(totalSales, 10000),
-                        salesChart: sales.map(d => Number(d.total || 0)),
+                        salesPercent: safePercent(totalSales, maxSales),
+                        salesChart: salesValues,
 
                         revenue: revenue,
-                        revenuePercent: safePercent(revenue, 150000),
-                        revenueChart: sales.map(d => Number(d.total || 0)),
+                        revenuePercent: safePercent(revenue, Math.max(revenue, 1)),
+                        revenueChart: salesValues,
 
                         expenses: expenses,
-                        expensesPercent: safePercent(expenses, revenue),
-                        expensesChart: sales.map(d => Number(d.total || 0)),
+                        expensesPercent: safePercent(expenses, maxExpenses),
+                        expensesChart: expenseValues,
+
+                        messages: messages,
+                        messagesPercent: safePercent(messages, 10) // 👈 dashboard only
                     }}
+                    showMessages={true}
                 />
-                />
+
             </div>
         </div>
     );

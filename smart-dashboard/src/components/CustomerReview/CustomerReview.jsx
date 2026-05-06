@@ -18,7 +18,7 @@ const CustomerReview = () => {
                 .then(res => {
 
                     const counts = res.data.map(item => item.count);
-                    const times = res.data.map(item => item.time);
+                    const times = res.data.map(item => new Date(item.time).getTime());
 
                     setSeries([
                         {

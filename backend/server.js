@@ -96,12 +96,27 @@ app.get("/orders", (req, res) => {
 // CREATE ORDER
 app.post("/orders", (req, res) => {
 
-    const { customer_name, items, total_price, table_no } = req.body;
+    const {
+        customer_name,
+        items,
+        total_price,
+        table_no,
+        phone,
+        transaction_id,
+        payment_method
+    } = req.body;
 
     console.log("🔥 Incoming order:", items);
 
     if (!items || items.length === 0) {
         return res.status(400).json({ error: "Items missing" });
+    }
+
+    // ✅ Transaction ID validation
+    if (payment_method !== "card") {
+        if (!transaction_id || transaction_id.trim() === "") {
+            return res.status(400).json({ error: "Transaction ID required" });
+        }
     }
 
     const cleanItems = items.map(item => ({
@@ -113,19 +128,29 @@ app.post("/orders", (req, res) => {
     const itemsJSON = JSON.stringify(cleanItems);
 
     db.query(
-        "INSERT INTO orders (customer_name, items, total_price, status, table_no) VALUES (?, ?, ?, ?, ?)",
-        [customer_name, itemsJSON, total_price, "pending", table_no],
+        `INSERT INTO orders 
+        (customer_name, items, total_price, status, table_no, phone, transaction_id, payment_method)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+            customer_name,
+            itemsJSON,
+            total_price,
+            "pending",
+            table_no,
+            phone,
+            transaction_id || null,
+            payment_method || null
+        ],
         (err, result) => {
 
             if (err) {
-                console.log("❌ DB Error:", err);
+                console.log(err);
                 return res.json(err);
             }
 
-            // 🔥 INVENTORY UPDATE
+            // 🔥 INVENTORY + ADDON
             cleanItems.forEach(item => {
 
-                // ================= 🔥 RECIPE SYSTEM =================
                 db.query(
                     "SELECT * FROM recipes WHERE LOWER(TRIM(item_name)) = LOWER(TRIM(?))",
                     [item.name],
@@ -139,16 +164,11 @@ app.post("/orders", (req, res) => {
                                 rec.quantity * item.qty
                             );
                         });
-
                     }
                 );
 
-
-                // ================= 🔥 ADDON SYSTEM =================
                 if (item.options.length > 0) {
-
                     item.options.forEach(opt => {
-
                         db.query(
                             "SELECT * FROM addon_mapping WHERE addon_name = ?",
                             [opt],
@@ -156,10 +176,7 @@ app.post("/orders", (req, res) => {
 
                                 if (err) return console.log(err);
 
-                                if (mapResult.length === 0) {
-                                    console.log("⚠️ No mapping for:", opt);
-                                    return;
-                                }
+                                if (mapResult.length === 0) return;
 
                                 const { inventory_name, quantity } = mapResult[0];
 
@@ -169,11 +186,8 @@ app.post("/orders", (req, res) => {
                                 );
                             }
                         );
-
                     });
-
                 }
-
             });
 
             const newOrder = {
@@ -186,12 +200,12 @@ app.post("/orders", (req, res) => {
             };
 
             io.emit("newOrder", newOrder);
+            io.emit("newSale", { amount: total_price });
 
             res.json(newOrder);
         }
     );
 });
-
 // UPDATE ORDER STATUS
 app.put("/orders/:id", (req, res) => {
     const { status } = req.body;
@@ -501,6 +515,30 @@ app.get("/messages-monthly", (req, res) => {
         (err, result) => {
             if (err) return res.status(500).json(err);
             res.json(result);
+        }
+    );
+});
+app.get("/total-expenses", (req, res) => {
+    db.query(
+        "SELECT SUM(amount) AS total FROM expenses",
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result[0]);
+        }
+    );
+});
+app.post("/expenses", (req, res) => {
+    const { amount, reason } = req.body;
+
+    db.query(
+        "INSERT INTO expenses (amount, reason, created_at) VALUES (?, ?, NOW())",
+        [amount, reason],
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+
+            io.emit("newExpense", { amount });
+
+            res.json({ success: true });
         }
     );
 });

@@ -38,38 +38,38 @@ export const SidebarData = [
     }
 ];
 
-export const getCardsData = (data = {}) => [
+export const getCardsData = () => [
     {
         title: "Sales",
-        value: data.sales || 0,
-        barValue: data.salesPercent || 0,
+        value: 5000,
+        barValue: 70,
         png: UilUsdSquare,
         color: {
             backGround: "linear-gradient(180deg,#bb67ff,#c484f3)",
             boxShadow: "0px 10px 20px 0px #e0c6f5",
         },
-        series: [{ name: "Sales", data: data.salesChart || [] }],
+        series: [{ name: "Sales", data: [1000, 2000, 3000, 5000] }],
     },
     {
         title: "Revenue",
-        value: data.revenue || 0,
-        barValue: data.revenuePercent || 0,
+        value: 8000,
+        barValue: 60,
         png: UilMoneyWithdrawal,
         color: {
             backGround: "linear-gradient(180deg,#FF919D,#FC929D)",
             boxShadow: "0px 10px 20px 0px #FDC0C7",
         },
-        series: [{ name: "Revenue", data: data.revenueChart || [] }],
+        series: [{ name: "Revenue", data: [2000, 3000, 4000, 8000] }],
     },
     {
         title: "Expenses",
-        value: data.expenses || 0,
-        barValue: data.expensesPercent || 0,
+        value: 3000,
+        barValue: 40,
         png: UilClipboardAlt,
         color: {
             backGround: "linear-gradient(#f8d49a,#ffca71)",
             boxShadow: "0px 10px 20px 0px #F9D59B",
         },
-        series: [{ name: "Expenses", data: data.expensesChart || [] }],
+        series: [{ name: "Expenses", data: [500, 1000, 2000, 3000] }],
     },
 ];
