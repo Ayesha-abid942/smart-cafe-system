@@ -26,10 +26,10 @@ export default function Home() {
   }, []);
 
   const popularItems = [
-    { name: "Latte", img: "/images/latte.png", rating: 4.9, orders: "1.2k+ orders", path: "/coffee", badge: "🔥 POPULAR", badgeColor: "#e63946" },
-    { name: "Zinger Burger", img: "/images/zinger-burger.png", rating: 4.8, orders: "950+ orders", path: "/burger", badge: "🍔 HOT", badgeColor: "#ff6b6b" },
-    { name: "Mango Shake", img: "/images/mango-shake.png", rating: 4.9, orders: "800+ orders", path: "/milkshake", badge: "🥤 CREAMY", badgeColor: "#e63946" },
-    { name: "Chicken Shawarma", img: "/images/chicken-shawarma.png", rating: 4.7, orders: "1.5k+ orders", path: "/shawarma", badge: "🌯 SPICY", badgeColor: "#ff6b6b" },
+    { name: "Coffee", img: "/images/coffee.png", rating: 4.9, orders: "1.2k+ orders", path: "/coffee", badge: "🔥 POPULAR", badgeColor: "#e63946" },
+    { name: "Burger", img: "/images/burger.png", rating: 4.8, orders: "950+ orders", path: "/burger", badge: "🍔 HOT", badgeColor: "#ff6b6b" },
+    { name: "Milk Shake", img: "/images/milk-shake.png", rating: 4.9, orders: "800+ orders", path: "/milkshake", badge: "🥤 CREAMY", badgeColor: "#e63946" },
+    { name: "Shawarma", img: "/images/shawarma.png", rating: 4.7, orders: "1.5k+ orders", path: "/shawarma", badge: "🌯 SPICY", badgeColor: "#ff6b6b" },
   ];
 
   const menuItems = [
