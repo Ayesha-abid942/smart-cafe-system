@@ -45,7 +45,7 @@ export const getCardsData = () => [
         barValue: 70,
         png: UilUsdSquare,
         color: {
-            backGround: "linear-gradient(180deg,#bb67ff,#c484f3)",
+            backGround: "linear-gradient(180deg,#D62839,#FF6B6B)",
             boxShadow: "0px 10px 20px 0px #e0c6f5",
         },
         series: [{ name: "Sales", data: [1000, 2000, 3000, 5000] }],
@@ -56,7 +56,7 @@ export const getCardsData = () => [
         barValue: 60,
         png: UilMoneyWithdrawal,
         color: {
-            backGround: "linear-gradient(180deg,#FF919D,#FC929D)",
+            backGround: "linear-gradient(135deg,#ff758c,#ff7eb3)",
             boxShadow: "0px 10px 20px 0px #FDC0C7",
         },
         series: [{ name: "Revenue", data: [2000, 3000, 4000, 8000] }],
@@ -67,7 +67,7 @@ export const getCardsData = () => [
         barValue: 40,
         png: UilClipboardAlt,
         color: {
-            backGround: "linear-gradient(#f8d49a,#ffca71)",
+            backGround: "linear-gradient(135deg,#ffb347,#ffcc33)",
             boxShadow: "0px 10px 20px 0px #F9D59B",
         },
         series: [{ name: "Expenses", data: [500, 1000, 2000, 3000] }],

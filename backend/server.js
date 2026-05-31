@@ -196,7 +196,8 @@ app.post("/orders", (req, res) => {
                 items: cleanItems,
                 total_price,
                 status: "pending",
-                table_no
+                table_no,
+                transaction_id
             };
 
             io.emit("newOrder", newOrder);
@@ -225,7 +226,25 @@ app.put("/orders/:id", (req, res) => {
         }
     );
 });
+app.get("/orders/track/:transaction_id", (req, res) => {
 
+    db.query(
+        "SELECT * FROM orders WHERE transaction_id = ?",
+        [req.params.transaction_id],
+        (err, result) => {
+
+            if (err) return res.status(500).json(err);
+
+            if (result.length === 0) {
+                return res.status(404).json({
+                    message: "Order not found"
+                });
+            }
+
+            res.json(result[0]);
+        }
+    );
+});
 // ================= INVENTORY =================
 app.get("/inventory", (req, res) => {
     db.query("SELECT * FROM inventory", (err, result) => {
