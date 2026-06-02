@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 import "./Updates.css";
 
 const socket = io("http://localhost:8001");
@@ -8,6 +9,7 @@ const socket = io("http://localhost:8001");
 const Updates = () => {
     const [alerts, setAlerts] = useState([]);
     const [messages, setMessages] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -32,24 +34,33 @@ const Updates = () => {
         // ================= LOW STOCK REALTIME =================
         socket.on("lowStock", (item) => {
             setAlerts((prev) => {
-                const exists = prev.find(a => a.name === item.name);
+                const exists = prev.find(
+                    (a) => a.name === item.name
+                );
 
                 if (exists) {
-                    return prev.map(a =>
+                    return prev.map((a) =>
                         a.name === item.name
-                            ? { ...a, quantity: item.quantity }
+                            ? {
+                                ...a,
+                                quantity: item.quantity
+                            }
                             : a
                     );
-                } else {
-                    return [
-                        { type: "stock", name: item.name, quantity: item.quantity },
-                        ...prev
-                    ].slice(0, 6);
                 }
+
+                return [
+                    {
+                        type: "stock",
+                        name: item.name,
+                        quantity: item.quantity
+                    },
+                    ...prev
+                ].slice(0, 6);
             });
         });
 
-        // ================= CONTACT MESSAGES REALTIME =================
+        // ================= CONTACT MESSAGES =================
         socket.on("newMessage", (msg) => {
             setMessages((prev) => [
                 {
@@ -73,11 +84,22 @@ const Updates = () => {
         <div className="updates">
 
             {/* ================= STOCK ALERTS ================= */}
-            {alerts.map((a, i) => (
-                <div key={"s" + i} className="update-card">
-                    <div className="name">{a.name}</div>
 
-                    <div className={`status ${a.quantity <= 3 ? "critical" : "low"}`}>
+            {alerts.map((a, i) => (
+                <div
+                    key={"s" + i}
+                    className="update-card"
+                >
+                    <div className="name">
+                        {a.name}
+                    </div>
+
+                    <div
+                        className={`status ${a.quantity <= 3
+                            ? "critical"
+                            : "low"
+                            }`}
+                    >
                         {a.quantity <= 3
                             ? `🚨 Critical (${a.quantity})`
                             : `⚠️ Low (${a.quantity})`}
@@ -86,17 +108,38 @@ const Updates = () => {
             ))}
 
             {/* ================= MESSAGES ================= */}
+
             {messages.map((m, i) => (
-                <div key={"m" + i} className="update-card message-card">
-                    <div className="msg-header"><strong>{m.name}</strong></div>
-                    <div className="msg-email">{m.email}</div>
-                    <div className="msg-body">{m.message}</div>
+                <div
+                    key={"m" + i}
+                    className="update-card message-card"
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                        navigate(
+                            "/admin/analytics#messages-section"
+                        )
+                    }
+                >
+                    <div className="msg-header">
+                        <strong>{m.name}</strong>
+                    </div>
+
+                    <div className="msg-email">
+                        {m.email}
+                    </div>
+
+                    <div className="msg-body">
+                        {m.message}
+                    </div>
                 </div>
             ))}
 
-            {alerts.length === 0 && messages.length === 0 && (
-                <p className="no-alerts">✅ No updates</p>
-            )}
+            {alerts.length === 0 &&
+                messages.length === 0 && (
+                    <p className="no-alerts">
+                        ✅ No updates
+                    </p>
+                )}
 
         </div>
     );

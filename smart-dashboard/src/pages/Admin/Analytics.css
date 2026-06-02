@@ -69,3 +69,87 @@
     font-size: 18px;
     font-weight: 600;
 }
+
+.messages-section {
+    margin-top: 35px;
+    width: 100%;
+}
+
+.messages-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.messages-header h2 {
+    margin: 0;
+    color: #242d49;
+}
+
+.messages-header span {
+    background: #eef4ff;
+    color: #0072ff;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+.messages-table-container {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.messages-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.messages-table thead {
+    background: linear-gradient(180deg,
+            #00c6ff,
+            #0072ff);
+}
+
+.messages-table th {
+    color: white;
+    text-align: left;
+    padding: 16px;
+    font-size: 15px;
+}
+
+.messages-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.messages-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.message-text {
+    max-width: 450px;
+    word-break: break-word;
+}
+
+.delete-btn {
+    border: none;
+    background: #ff4d4f;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.delete-btn:hover {
+    opacity: 0.9;
+}
+
+.empty-row {
+    text-align: center;
+    padding: 30px !important;
+    color: gray;
+}

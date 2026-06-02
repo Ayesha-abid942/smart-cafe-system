@@ -3,6 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const mysql = require("mysql2");
 const { Server } = require("socket.io");
+const axios = require("axios");
 
 const app = express();
 app.use(cors());
@@ -416,6 +417,30 @@ app.post("/api/messages", (req, res) => {
         }
     );
 });
+app.get("/api/messages", (req, res) => {
+    db.query(
+        "SELECT * FROM messages ORDER BY id DESC",
+        (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json(result);
+        }
+    );
+});
+
+app.delete("/api/messages/:id", (req, res) => {
+    db.query(
+        "DELETE FROM messages WHERE id = ?",
+        [req.params.id],
+        (err) => {
+            if (err) return res.status(500).json(err);
+
+            res.json({
+                success: true,
+                message: "Message deleted"
+            });
+        }
+    );
+});
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
@@ -560,6 +585,26 @@ app.post("/expenses", (req, res) => {
             res.json({ success: true });
         }
     );
+});
+
+app.get("/ai-sales", async (req, res) => {
+
+    try {
+
+        const response = await axios.get(
+            "http://localhost:5000/sales-analytics"
+        );
+
+        res.json(response.data);
+
+    } catch (err) {
+
+        console.log(err.message);
+
+        res.status(500).json({
+            error: "Flask service not running"
+        });
+    }
 });
 // ================= START =================
 server.listen(8001, () => {
